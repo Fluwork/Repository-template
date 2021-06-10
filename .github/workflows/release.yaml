@@ -19,3 +19,24 @@ jobs:
                 with:
                     draft: true
                     name: Release ${{github.ref}}
+                    body: |
+                        # Changelog
+
+                        ## Added
+                        -
+
+                        ## Changed
+                        -
+
+                        ## Deprecated
+                        -
+
+                        ## Removed
+                        -
+
+                        ## Security
+                        -
+
+                        # Contributors
+                        > Thanks to our contributors!
+                        -
