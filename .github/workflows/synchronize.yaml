@@ -1,0 +1,47 @@
+name: Synchronize branches
+
+on:
+    push:
+        branches:
+            - main
+            - '[0-9]+.x'
+
+jobs:
+    synchronize:
+        name: Synchronize branches
+        runs-on: ubuntu-latest
+        env:
+            FIND_BASE_BRANCH: false
+
+        steps:
+            -   name: Checkout all refs
+                uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0
+            -   name: Setup Git user
+                run: |
+                    git config user.name github-actions
+                    git config user.email github-actions@github.com
+
+            ##           UNCOMMENT WHEN 2.0.0 IS RELEASED
+            #            -   name: Rebase 1.x to main
+            #                if: github.ref == 'refs/heads/1.x'
+            #                run: |
+            #                    echo "FIND_BASE_BRANCH=true" >> $GITHUB_ENV
+            #                    git checkout main
+            #                    git rebase 1.x
+
+            ##           UNCOMMENT WHEN 3.0.0 IS RELEASED AND EDIT STEP ABOVE
+            #            -   name: Rebase 2.x to main
+            #                if: github.ref == 'refs/heads/2.x' || env.FIND_BASE_BRANCH == 'true'
+            #                run: |
+            #                    echo "FIND_BASE_BRANCH=true" >> $GITHUB_ENV
+            #                    git checkout main
+            #                    git rebase 2.x
+
+            -   name: Rebase main to next
+                run: |
+                    git checkout next
+                    git rebase main
+            -   name: Push all
+                run: git push --all --force
